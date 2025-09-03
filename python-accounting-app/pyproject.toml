@@ -1,0 +1,11 @@
+[project]
+name = "python-accounting-app"
+version = "0.1.0"
+description = "Simple accounting application"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+pythonpath = ["."]
