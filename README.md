@@ -27,6 +27,7 @@ pip install -r requirements.txt
 ### Running the Application
 
 ```bash
+cd python-accounting-app
 python -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 python src/main.py

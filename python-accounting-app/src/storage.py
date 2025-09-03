@@ -6,3 +6,6 @@ class Storage:
 
     def get_balance(self) -> Decimal:
         return self._balance
+
+    def write_balance(self, amount: Decimal) -> None:
+        self._balance = amount
