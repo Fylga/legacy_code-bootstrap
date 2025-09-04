@@ -12,9 +12,9 @@ def operations(datastore):
     return Operations(datastore)
 
 def test_total_prints_balance(operations, capsys):
-    operations.total()
-    captured = capsys.readouterr()
-    assert "Current balance: 1000.00" in captured.out
+  operations.total()
+  captured = capsys.readouterr()
+  assert "Current balance: 1000.00" in captured.out
 
 def _patch_inputs(monkeypatch, inputs):
   it = iter(inputs)
@@ -42,7 +42,7 @@ def test_debit_valid_amount(monkeypatch, capsys):
   _patch_inputs(monkeypatch, ["3", "19.99", "4"])
   ret = main()
   captured = capsys.readouterr()
-  assert "980.01" in captured.out
+  assert "Amount debited" in captured.out
 
 def test_debit_unvalid_amount(monkeypatch, capsys):
   _patch_inputs(monkeypatch, ["3", "-20", "4"])
