@@ -37,3 +37,27 @@ def test_credit_unvalid_value(monkeypatch, capsys):
   ret = main()
   captured = capsys.readouterr()
   assert "Invalid amount. Please enter a numeric value." in captured.out
+
+def test_debit_valid_amount(monkeypatch, capsys):
+  _patch_inputs(monkeypatch, ["3", "19.99", "4"])
+  ret = main()
+  captured = capsys.readouterr()
+  assert "980.01" in captured.out
+
+def test_debit_unvalid_amount(monkeypatch, capsys):
+  _patch_inputs(monkeypatch, ["3", "-20", "4"])
+  ret = main()
+  captured = capsys.readouterr()
+  assert "Debit amount must be positive." in captured.out
+
+def test_debit_unvalid_value(monkeypatch, capsys):
+  _patch_inputs(monkeypatch, ["3", "money", "4"])
+  ret = main()
+  captured = capsys.readouterr()
+  assert "Invalid amount. Please enter a numeric value." in captured.out
+
+def test_debit_unsufficient_fund(monkeypatch, capsys):
+  _patch_inputs(monkeypatch, ["3", "20000", "4"])
+  ret = main()
+  captured = capsys.readouterr()
+  assert "Insufficient funds for this debit." in captured.out

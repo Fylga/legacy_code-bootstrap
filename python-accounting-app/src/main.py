@@ -6,6 +6,7 @@ operations = Operations(storage)
 actions = {
     "1": operations.total,
     "2": operations.credit,
+    "3": operations.debit,
 }
 
 def main():
