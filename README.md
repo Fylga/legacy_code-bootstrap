@@ -16,11 +16,14 @@ This repository contains a simple COBOL application that simulates a basic accou
 
 - Python 3.10 or higher
 - pip (Python package installer)
+- venv (for creating virtual environments)
 
 ### Installation
 
 ```bash
 cd python-accounting-app
+python -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 pip install -e .
 pip install -r requirements.txt
 ```
@@ -28,8 +31,6 @@ pip install -r requirements.txt
 ### Running the Application
 
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 python src/main.py
 ```
 ### Running Tests

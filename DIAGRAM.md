@@ -1,48 +1,63 @@
 ```mermaid
 sequenceDiagram
     participant User
-    participant MainProgram as MainProgram (main.cob)
-    participant Operations as Operations (operations.cob)
-    participant DataProgram as DataProgram (data.cob)
+    participant Main as Main (python-accounting-app/src/main.py)
+    participant Ops as Operations (python-accounting-app/src/operations.py)
+    participant Store as DataStore (python-accounting-app/src/datastore.py)
 
-    User->>MainProgram: Start Application / Select Option (1-4)
-    alt View Balance (1)
-        MainProgram->>Operations: CALL 'Operations' USING 'TOTAL '
-        Operations->>DataProgram: CALL 'DataProgram' USING 'READ', FINAL-BALANCE
-        DataProgram-->>Operations: RETURN FINAL-BALANCE
-        Operations->>User: DISPLAY "Current balance: " FINAL-BALANCE
+    User->>Main: Start app / select option (1-4)
+    Main->>User: Display menu (1:View 2:Credit 3:Debit 4:Exit)
+    User->>Main: Enter choice
+
+    alt View balance (1)
+        Main->>Ops: call total()
+        Ops->>Store: get_balance()
+        Store-->>Ops: return balance
+        Ops->>User: "Current balance: <balance>"
     end
 
-    alt Credit Account (2)
-        MainProgram->>Operations: CALL 'Operations' USING 'CREDIT'
-        Operations->>User: DISPLAY "Enter credit amount:"
-        User->>Operations: Enter AMOUNT
-        Operations->>DataProgram: CALL 'DataProgram' USING 'READ', FINAL-BALANCE
-        DataProgram-->>Operations: RETURN FINAL-BALANCE
-        Operations->>Operations: ADD AMOUNT TO FINAL-BALANCE
-        Operations->>DataProgram: CALL 'DataProgram' USING 'WRITE', FINAL-BALANCE
-        DataProgram-->>Operations: RETURN
-        Operations->>User: DISPLAY "Amount credited. New balance: " FINAL-BALANCE
+    alt Credit account (2)
+        Main->>Ops: call credit()
+        Ops->>User: "Enter credit amount:"
+        User->>Ops: enter amount (string)
+        Ops->>Ops: parse Decimal(input) and validate
+        alt parse error
+            Ops->>User: "Invalid amount. Please enter a numeric value."
+        else negative amount
+            Ops->>User: "Credit amount must be positive."
+        else valid amount
+            Ops->>Store: get_balance()
+            Store-->>Ops: return balance
+            Ops->>Store: write_balance(balance + amount)
+            Store-->>Ops: ack
+            Ops->>User: "Amount credited. New balance: <new balance>"
+        end
     end
 
-    alt Debit Account (3)
-        MainProgram->>Operations: CALL 'Operations' USING 'DEBIT '
-        Operations->>User: DISPLAY "Enter debit amount:"
-        User->>Operations: Enter AMOUNT
-        Operations->>DataProgram: CALL 'DataProgram' USING 'READ', FINAL-BALANCE
-        DataProgram-->>Operations: RETURN FINAL-BALANCE
-        alt Sufficient Funds
-            Operations->>Operations: SUBTRACT AMOUNT FROM FINAL-BALANCE
-            Operations->>DataProgram: CALL 'DataProgram' USING 'WRITE', FINAL-BALANCE
-            DataProgram-->>Operations: RETURN
-            Operations->>User: DISPLAY "Amount debited. New balance: " FINAL-BALANCE
-        else Insufficient Funds
-            Operations->>User: DISPLAY "Insufficient funds for this debit."
+    alt Debit account (3)
+        Main->>Ops: call debit()
+        Ops->>User: "Enter debit amount:"
+        User->>Ops: enter amount (string)
+        Ops->>Ops: parse Decimal(input) and validate
+        alt parse error
+            Ops->>User: "Invalid amount. Please enter a numeric value."
+        else negative amount
+            Ops->>User: "Debit amount must be positive."
+        else valid amount
+            Ops->>Store: get_balance()
+            Store-->>Ops: return balance
+            alt amount > balance
+                Ops->>User: "Insufficient funds for this debit."
+            else sufficient funds
+                Ops->>Store: write_balance(balance - amount)
+                Store-->>Ops: ack
+                Ops->>User: "Amount debited. New balance: <new balance>"
+            end
         end
     end
 
     alt Exit (4)
-        MainProgram->>MainProgram: MOVE 'NO' TO CONTINUE-FLAG
-        MainProgram->>User: DISPLAY "Exiting the program. Goodbye!"
+        Main->>User: "Exiting the program. Goodbye!"
+        Main-->>Main: return 0
     end
 ```
