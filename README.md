@@ -20,6 +20,7 @@ This repository contains a simple COBOL application that simulates a basic accou
 ### Installation
 
 ```bash
+cd python-accounting-app
 pip install -e .
 pip install -r requirements.txt
 ```
@@ -27,7 +28,6 @@ pip install -r requirements.txt
 ### Running the Application
 
 ```bash
-cd python-accounting-app
 python -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 python src/main.py
