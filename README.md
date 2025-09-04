@@ -35,5 +35,5 @@ python src/main.py
 ### Running Tests
 
 ```bash
-pytest
+pytest --cov=src --cov-report=term-missing tests
 ```
