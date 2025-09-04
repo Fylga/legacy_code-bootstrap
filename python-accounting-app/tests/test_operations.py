@@ -26,6 +26,18 @@ def test_credit_valid_amount(monkeypatch, capsys):
   captured = capsys.readouterr()
   assert "1019.99" in captured.out
 
+def test_credit_value_with_comma(monkeypatch, capsys):
+  _patch_inputs(monkeypatch, ["2", "20,00", "4"])
+  ret = main()
+  captured = capsys.readouterr()
+  assert "Invalid amount. Please enter a numeric value." in captured.out
+
+def test_credit_value_with_scientific_notation(monkeypatch, capsys):
+  _patch_inputs(monkeypatch, ["2", "1e2", "4"])
+  ret = main()
+  captured = capsys.readouterr()
+  assert "1119.99" in captured.out
+
 def test_credit_unvalid_amount(monkeypatch, capsys):
   _patch_inputs(monkeypatch, ["2", "-20", "4"])
   ret = main()
@@ -42,7 +54,19 @@ def test_debit_valid_amount(monkeypatch, capsys):
   _patch_inputs(monkeypatch, ["3", "19.99", "4"])
   ret = main()
   captured = capsys.readouterr()
-  assert "Amount debited" in captured.out
+  assert "1100.00" in captured.out
+
+def test_debit_value_with_comma(monkeypatch, capsys):
+  _patch_inputs(monkeypatch, ["3", "20,00", "4"])
+  ret = main()
+  captured = capsys.readouterr()
+  assert "Invalid amount. Please enter a numeric value." in captured.out
+
+def test_debit_value_with_scientific_notation(monkeypatch, capsys):
+  _patch_inputs(monkeypatch, ["3", "1e2", "4"])
+  ret = main()
+  captured = capsys.readouterr()
+  assert "1000.00" in captured.out
 
 def test_debit_unvalid_amount(monkeypatch, capsys):
   _patch_inputs(monkeypatch, ["3", "-20", "4"])
