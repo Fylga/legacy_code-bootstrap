@@ -5,6 +5,7 @@ storage = DataStore()
 operations = Operations(storage)
 actions = {
     "1": operations.total,
+    "2": operations.credit,
 }
 
 def main():
