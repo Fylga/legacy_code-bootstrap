@@ -6,20 +6,20 @@ sequenceDiagram
     participant Store as DataStore (python-accounting-app/src/datastore.py)
 
     User->>Main: Start app / select option (1-4)
-    Main->>User: Display menu (1:View 2:Credit 3:Debit 4:Exit)
+    Main->>User: Display menu
     User->>Main: Enter choice
 
     alt View balance (1)
-        Main->>Ops: call total()
+        Main->>Ops: total()
         Ops->>Store: get_balance()
         Store-->>Ops: return balance
         Ops->>User: "Current balance: <balance>"
     end
 
     alt Credit account (2)
-        Main->>Ops: call credit()
-        Ops->>User: "Enter credit amount:"
-        User->>Ops: enter amount (string)
+        Main->>Ops: credit()
+        Ops->>User: "Enter credit amount"
+        User->>Ops: input (string)
         Ops->>Ops: parse Decimal(input) and validate
         alt parse error
             Ops->>User: "Invalid amount. Please enter a numeric value."
@@ -35,9 +35,9 @@ sequenceDiagram
     end
 
     alt Debit account (3)
-        Main->>Ops: call debit()
-        Ops->>User: "Enter debit amount:"
-        User->>Ops: enter amount (string)
+        Main->>Ops: debit()
+        Ops->>User: "Enter debit amount"
+        User->>Ops: input (string)
         Ops->>Ops: parse Decimal(input) and validate
         alt parse error
             Ops->>User: "Invalid amount. Please enter a numeric value."
