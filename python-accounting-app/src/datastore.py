@@ -4,11 +4,11 @@ from abc import ABC, abstractmethod
 class IDataStore:
     @abstractmethod
     def get_balance(self) -> Decimal:
-        pass
+        ...
 
     @abstractmethod
     def write_balance(self, amount: Decimal) -> None:
-        pass
+        ...
 
 class DataStore(IDataStore):
     def __init__(self, balance: Decimal = Decimal("1000.00")):
