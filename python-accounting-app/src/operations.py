@@ -1,8 +1,8 @@
-from datastore import DataStore
+from datastore import IDataStore
 from decimal import Decimal
 
 class Operations:
-    def __init__(self, storage: DataStore):
+    def __init__(self, storage: IDataStore):
         self.storage = storage
 
     def total(self) -> None:
